@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+<!--导入custom_tags模块//-->
+{% load custom_tags %}
+
+{% block page-header %}
+    客户详细信息
+{% endblock %}
+<!--https://v3.bootcss.com/css/#tables此页为用户详细信息表内容，展示的为hostserver_form不修改为django自带的forms//-->
+{% block page-content %}
+    <form class="form-horizontal" method="post" >{% csrf_token %}
+        {% for field in hostserver_form %}    <!--for循环从hostserver_form中取值//-->
+            <div class="form-group">
+                {% if field.field.required %}   <!--对hostserver_detail.html里的label样式做判断是否为必须填写字段,是加粗不是为细//-->
+                    <label class="col-sm-1 control-label" style="float:left; text-align:left">*{{ field.label }}</label>
+                {% else %}
+                    <label class="col-sm-1 control-label" style="float:left; text-align:left; font-weight:normal">{{ field.label }}</label>
+                {% endif %}
+                <div class="col-sm-11">
+                    {{ field }}
+                    {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                                <li style="color:red">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Email">-->
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="col-md-13">
+            <input class="btn btn-success pull-right" type="submit" value="Save">    <!--设置保存按钮引入csrf_token允许提交//-->
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,16 @@
+root@zabbix_prd02-3-202:/home/app/nginx/conf.d$vim crm.conf 
+upstream http_backend {
+        #ip_hash;
+        server 10.10.3.202:8000;
+        }
+server {
+        server_name crmidc.corp.kjtjia.com;
+        access_log  /data/logs/nginx/access.log  gzip;
+        error_log   /data/logs/nginx/error.log error;
+        location / {
+                 proxy_pass http://http_backend;
+        }
+        #location / {
+        #       rewrite ^(.*) http://crmidc.corp.kjtjia.com:8000/crm/hostservers03 permanent;
+        #}
+}

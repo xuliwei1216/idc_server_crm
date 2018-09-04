@@ -1,0 +1,25 @@
+{(('signed',u"已报名"),
+                     ('unregistered',u"未报名"),
+                     ('graduated',u"已毕业"),
+                     ('drop-off',u"退学"),
+                     )}
+
+
+.unregistered{
+    background-color: darkgray;
+}
+
+
+.graduated{
+    background-color: orange;
+}
+
+
+.drop-off{
+    background-color: whitesmoke;
+}
+
+
+.signed{
+    background-color: greenyellow;
+}

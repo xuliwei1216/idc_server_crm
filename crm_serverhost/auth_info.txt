@@ -1,0 +1,76 @@
+销售
+    客户纪录
+    能修改自己的纪录  url post action=change
+    创建记录   url post action=add
+    不通修改别人的纪录
+    可以开本校区的所有客户记录  url get school=动态
+
+老师
+    创建上课记录, 点名, 批作业, 管理班级
+
+学员
+    查看自己的成绩
+    交作业
+    介绍学院
+    建议投诉
+
+分页
+   包含当前页
+分页显示高级功能限制显示数字框引入abs绝对值
+在项目app下创建templatetags目录
+
+>>> from django.core.paginator import Paginator
+>>> objs = ['alex','rain','eric',34,5,6,7,78]
+>>> objs
+['alex', 'rain', 'eric', 34, 5, 6, 7, 78]
+>>> p = Paginator(objs, 3)
+>>> p.count
+8
+>>> p.num_pages
+3
+>>> p.page_range
+range(1, 4)
+>>> p1 = p.page(1)
+>>> p1
+<Page 1 of 3>
+>>> p1.object_list
+['alex', 'rain', 'eric']
+>>> p1 = p.page(2)
+>>> p1
+<Page 2 of 3>
+>>> p1.object_list
+[34, 5, 6]
+>>> p1.has_next()
+True
+>>> p1.has_previous()
+True
+>>> p1.has_other_pages()
+True
+>>> p3 = p.page(3)
+>>> p3.object_list
+[7, 78]
+
+>>> p1 = p.page(1)
+>>> p1.paginator.page_range
+range(1, 4)
+>>> p2 = p.page(2)
+>>> p2.paginator.page_range
+range(1, 4)
+>>> 
+############################user.has_perm('app.view_task')#################################
+>>> from crm import models
+>>> u1 = models.UserProfile.objects.last()
+>>> u1
+<UserProfile: Jack.yoyo>
+#  判断其有没有权限
+>>> u1.user.has_perm("crm.can_del_customer")
+True
+>>> u1.user.has_perm("crm.can_del_custdfasdfa")
+False
+
+
+主流方法用bootstrap和jquery
+# django2.0from django.urls import resolve 将url转换成字符串别名
+>>> from django.urls import resolve
+>>> resolve("/crm/customers/3/").url_name                                                 
+'customer_detail

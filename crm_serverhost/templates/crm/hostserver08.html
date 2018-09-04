@@ -1,0 +1,75 @@
+{% extends 'base08.html' %}
+<!--导入custom_tags模块//-->
+{% load custom_tags %}
+
+{% block page-header %}
+    XXX电信IDC机房信息列表 F0X机柜
+{% endblock %}
+<!--https://v3.bootcss.com/css/#tables  truncatechars 50限制此处内容字数,引入数字转大写hostserver.status | xlw_upper(将前面hostserver.status的值传给后面的函数xlw_upper)//-->
+{% block page-content %}
+    {{ hostserver_list }}
+    <table class="table table-hover">
+       <thead>
+          <tr>
+             <th>ID</th>
+             <th>主机</th>
+             <th>主机名</th>
+             <th>联系电话</th>
+             <th>主机编号</th>
+             <th>主机信息</th>
+             <th>状态</th>
+              <th>状态</th>
+             <th>日期</th>
+          </tr>
+       </thead>
+       <tbody>
+       {% for hostserver in hostserver_list %}
+          <tr>
+             <!--<td><a href="/crm/hostservers/{{ hostserver.id }}/">{{ hostserver.id }}</a></td>用以下方法把url和别名自动关联-->
+             <td><a href="{% url 'hostserver_detail' hostserver.id %}">{{ hostserver.id }}</a></td>
+             <td>{{ hostserver.host }}</td>
+             <td>{{ hostserver.name }}</td>
+             <td>{{ hostserver.phone }}</td>
+             <td>{{ hostserver.stu_id }}</td>
+             <td>{{ hostserver.server_memo | truncatechars:50 }}</td>
+             <td class="{{ hostserver.status }}">{{ hostserver.status | xlw_upper }}</td>
+              <td>{{ hostserver.colored_status }}</td>
+             <td>{{ hostserver.date }}</td>
+          </tr>
+       {% endfor %}
+       </tbody>
+    </table>
+    
+    <div class="pagination">      <!--点击显示当前页为高亮即判断当前页位置数字加入到active否则不是当前页不显示active//-->
+        <nav>
+            <ul class="pagination">
+                {% if hostserver_list.has_previous %}  <!--判断下一页数字有没有,没有就不执行li标签,li标签可显示有下一页的内容并可以点击操作//-->
+                    <li class=""><a href="?page={{ hostserver_list.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                {% endif %}
+
+                {% for page_num in hostserver_list.paginator.page_range %}   <!--点击显示当前页为高亮即判断当前页位置数字加入到active否则不是当前页不显示active//-->
+                    {% guess_page hostserver_list.number page_num %}
+                    <!--将hostserver_list.number page_num传给guess_page 到后台custom_tags.py 中的 def guess_page(current_page,loop_num):见后端custom_tags.py内容//-->
+                {% endfor %}
+
+                {% if hostserver_list.has_next %}
+                    <li class=""><a href="?page={{ hostserver_list.next_page_number }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <span class="step-links">    <!--引入js模块后后台判断有无//-->
+            {% if hostserver_list.has_previous %}
+                <a href="?page={{ hostserver_list.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ hostserver_list.number }} of {{ hostserver_list.paginator.num_pages }}.
+            </span>
+
+            {% if hostserver_list.has_next %}
+                <a href="?page={{ hostserver_list.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
